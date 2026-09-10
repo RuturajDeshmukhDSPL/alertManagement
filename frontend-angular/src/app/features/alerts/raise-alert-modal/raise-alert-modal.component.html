@@ -1,0 +1,144 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm" (click)="$event.target === $event.currentTarget && close()">
+  <div class="modal-panel relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden m-4">
+    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+          <span class="material-symbols-outlined text-[20px]">add_alert</span>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Raise New Alert</h3>
+          <p class="text-xs text-slate-500">Dispatch an immediate alert to SRE and incident responders</p>
+        </div>
+      </div>
+      <button class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer" type="button" (click)="close()">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+
+    <form class="p-6 space-y-4" (submit)="$event.preventDefault(); submit()">
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Alert Title / Summary *</label>
+        <input
+          class="w-full px-3 py-2 rounded-lg border text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+          [class]="submitAttempted() && !title().trim() ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-200 focus:border-blue-500'"
+          placeholder="e.g., Memory leak spike in auth-service container"
+          type="text"
+          [ngModel]="title()"
+          (ngModelChange)="title.set($event)"
+          name="title"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Host / Resource Name *</label>
+          <input
+            class="w-full px-3 py-2 rounded-lg border text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              [class]="submitAttempted() && !host().trim() ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-200 focus:border-blue-500'"
+            placeholder="e.g., db-prod-03.internal"
+            type="text"
+            [ngModel]="host()"
+            (ngModelChange)="host.set($event)"
+            name="host"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Source / Monitor *</label>
+          <select
+            class="w-full px-3 py-2 rounded-lg border focus:outline-none text-sm text-slate-900 bg-white"
+            [class]="submitAttempted() && !source() ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-200 focus:border-blue-500'"
+            [ngModel]="source()"
+            (ngModelChange)="source.set($event)"
+            name="source"
+          >
+            @for (s of sources; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Facility *</label>
+        <select
+          class="w-full px-3 py-2 rounded-lg border text-sm text-slate-900 bg-white focus:outline-none"
+          [class]="submitAttempted() && !facilityId() ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-200 focus:border-blue-500'"
+          [ngModel]="facilityId()"
+          (ngModelChange)="facilityId.set($event)"
+          name="facilityId"
+        >
+          @for (f of facilities(); track f.id) {
+            <option [value]="f.id">{{ f.name }} · {{ f.location }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Severity</label>
+          <div class="grid grid-cols-2 gap-1.5">
+            @for (sev of severities; track sev) {
+              <label
+                class="flex items-center gap-1.5 p-2 rounded-lg border cursor-pointer text-xs font-medium"
+                [class]="severity() === sev ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                (click)="severity.set(sev)"
+              >
+                <input type="radio" name="severity" [value]="sev" [checked]="severity() === sev" (change)="severity.set(sev)" />
+                {{ sev }}
+              </label>
+            }
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Assignee / Owner</label>
+          <select
+            class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-blue-500 text-sm text-slate-900 bg-white"
+            [ngModel]="ownerId()"
+            (ngModelChange)="ownerId.set(+$event)"
+            name="owner"
+          >
+            @for (user of users(); track user.id) {
+              <option [value]="user.id">{{ user.name }} · {{ user.role }}</option>
+            }
+          </select>
+          <div class="mt-2.5">
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Initial Status</label>
+            <select
+              class="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-blue-500 text-xs text-slate-900 bg-white"
+              [ngModel]="status()"
+              (ngModelChange)="status.set($event)"
+              name="status"
+            >
+              <option value="Active">Active</option>
+              <option value="Addressed">Addressed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Description / Observed Behavior</label>
+        <textarea
+          class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-blue-500 text-sm text-slate-900 placeholder:text-slate-400 resize-none h-20"
+          placeholder="Describe anomalous spike, target IP ranges, or error threshold conditions..."
+          [ngModel]="description()"
+          (ngModelChange)="description.set($event)"
+          name="description"
+        ></textarea>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+        @if (submitError()) {
+          <p class="mr-auto text-xs text-red-600">{{ submitError() }}</p>
+        }
+        <button class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer" type="button" (click)="close()">
+          Cancel
+        </button>
+        <button class="px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-60" type="button" [disabled]="isSubmitting()" (click)="submit()">
+          <span class="material-symbols-outlined text-[16px]">campaign</span>
+          <span>{{ isSubmitting() ? 'Submitting...' : 'Submit & Broadcast Alert' }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+.env
+.env.*
+!.env.example
+
+# Node.js dependencies and generated output
+**/node_modules/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+**/dist/
+**/.angular/
+**/coverage/
+
+# Local logs and runtime files
+*.log
+*.pid
+
+# Python and Selenium test artifacts
+testing/__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

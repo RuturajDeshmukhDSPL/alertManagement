@@ -1,0 +1,119 @@
+<div class="flex flex-wrap items-center justify-between gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+  <div class="flex flex-wrap items-center gap-2.5">
+    <!-- All -->
+    <button
+      type="button"
+      class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition-all cursor-pointer"
+      [class]="isActive('all', 'all')
+        ? 'bg-blue-50 border-2 border-blue-600 text-blue-900 ring-2 ring-blue-100'
+        : 'bg-white border border-slate-200 text-slate-700 font-medium hover:border-slate-300 hover:bg-slate-50'"
+      (click)="toggle('all', 'all')"
+    >
+      <span class="material-symbols-outlined text-[16px]">apps</span>
+      <span>All</span>
+      <span class="ml-1 px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 text-xs font-semibold">{{ counts().total }}</span>
+    </button>
+
+    <!-- Latest -->
+    <button
+      type="button"
+      class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition-all cursor-pointer"
+      [class]="isActive('preset', 'latest')
+        ? 'bg-blue-50 border-2 border-blue-600 text-blue-900 ring-2 ring-blue-100'
+        : 'bg-white border border-slate-200 text-slate-700 font-medium hover:border-slate-300 hover:bg-slate-50'"
+      (click)="toggle('preset', 'latest')"
+    >
+      <span class="material-symbols-outlined text-[16px] text-blue-600">schedule</span>
+      <span>Latest</span>
+      <span class="ml-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100 text-xs font-semibold">{{ counts().latest }}</span>
+    </button>
+
+    <div class="h-5 w-px bg-slate-200 mx-0.5"></div>
+
+    <!-- Severity chips -->
+    @for (sev of severities; track sev) {
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm shadow-sm transition-all cursor-pointer"
+        [class]="isActive('severity', sev)
+          ? 'bg-blue-50 border-2 border-blue-600 text-blue-900 font-semibold ring-2 ring-blue-100'
+          : 'bg-white border border-slate-200 text-slate-700 font-medium hover:border-slate-300 hover:bg-slate-50'"
+        (click)="toggle('severity', sev)"
+      >
+        <span class="w-2 h-2 rounded-full" [class]="severityStyles[sev].dot"></span>
+        <span>{{ sev }}</span>
+        <span class="ml-1 px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-semibold">{{ severityCount(sev) }}</span>
+      </button>
+    }
+
+    <div class="h-5 w-px bg-slate-200 mx-0.5"></div>
+
+    <!-- Status chips -->
+    @for (st of statuses; track st) {
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm shadow-sm transition-all cursor-pointer"
+        [class]="isActive('status', st)
+          ? 'bg-blue-50 border-2 border-blue-600 text-blue-900 font-semibold ring-2 ring-blue-100'
+          : 'bg-white border border-slate-200 text-slate-700 font-medium hover:border-slate-300 hover:bg-slate-50'"
+        (click)="toggle('status', st)"
+      >
+        <span class="w-2 h-2 rounded-full" [class]="statusStyles[st].dot"></span>
+        <span>{{ st }}</span>
+        <span class="ml-1 px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-semibold">{{ statusCount(st) }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="flex items-center gap-2 ml-auto shrink-0 bg-slate-50/80 p-1.5 rounded-lg border border-slate-200">
+    <div class="flex items-center gap-1.5 text-slate-500 pl-1">
+      <span class="material-symbols-outlined text-[18px] text-blue-600">calendar_month</span>
+      <span class="text-xs font-semibold text-slate-700 hidden sm:inline">Date Range:</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <label class="text-[11px] font-medium text-slate-500">From</label>
+      <input
+        class="px-2 py-1 rounded-md border border-slate-200 bg-white text-slate-800 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all cursor-pointer"
+        type="date"
+        [ngModel]="dateFrom()"
+        (ngModelChange)="dateFromChange.emit($event)"
+      />
+    </div>
+    <span class="text-slate-300 font-light">—</span>
+    <div class="flex items-center gap-1.5">
+      <label class="text-[11px] font-medium text-slate-500">To</label>
+      <input
+        class="px-2 py-1 rounded-md border border-slate-200 bg-white text-slate-800 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all cursor-pointer"
+        type="date"
+        [ngModel]="dateTo()"
+        (ngModelChange)="dateToChange.emit($event)"
+      />
+    </div>
+    <!-- <button
+      class="px-2.5 py-1 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+      type="button"
+      (click)="applyDate.emit()"
+    >
+      <span>Apply</span>
+    </button> -->
+    @if (hasDateActive()) {
+      <button
+        class="p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer"
+        type="button"
+        title="Clear date range"
+        (click)="clearDate.emit()"
+      >
+        <span class="material-symbols-outlined text-[16px]">close</span>
+      </button>
+    }
+    @if (hasActiveFilter()) {
+      <button
+        class="text-xs text-blue-600 hover:text-blue-800 font-medium ml-1 underline transition-colors cursor-pointer"
+        type="button"
+        (click)="clearAll.emit()"
+      >
+        Clear filter
+      </button>
+    }
+  </div>
+</div>

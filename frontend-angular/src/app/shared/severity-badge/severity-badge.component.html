@@ -1,0 +1,9 @@
+<span
+  class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-medium border"
+  [class]="style().badge"
+>
+  @if (showIcon()) {
+    <span class="material-symbols-outlined text-[14px]" [class]="style().iconColor">{{ style().icon }}</span>
+  }
+  {{ severity() }}
+</span>

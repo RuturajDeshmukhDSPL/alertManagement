@@ -1,0 +1,114 @@
+<div class="space-y-6">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Facility Management</h1>
+      <p class="text-sm text-slate-500 mt-0.5">{{ facilities().length }} enterprise monitored sites · {{ networkSummary().operationalZones }} operational zones · {{ networkSummary().totalDevices }} active devices</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div class="space-y-1">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Facilities</p>
+        <p class="text-2xl font-bold text-slate-900">{{ facilities().length }}</p>
+        <span class="text-[11px] text-emerald-600 font-medium flex items-center gap-0.5">
+          <span class="material-symbols-outlined text-[14px]">check_circle</span>All Connected
+        </span>
+      </div>
+      <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+        <span class="material-symbols-outlined text-[20px]">apartment</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div class="space-y-1">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Operational Areas</p>
+        <p class="text-2xl font-bold text-slate-900">{{ networkSummary().operationalZones }}</p>
+        <span class="text-[11px] text-slate-500 font-medium">Across {{ networkSummary().regions }} regions</span>
+      </div>
+      <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
+        <span class="material-symbols-outlined text-[20px]">grid_view</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div class="space-y-1">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Incidents</p>
+        <p class="text-2xl font-bold text-red-600">{{ totalActiveAlerts() }}</p>
+        <span class="text-[11px] text-red-600 font-medium flex items-center gap-0.5">
+          <span class="material-symbols-outlined text-[14px]">warning</span>{{ criticalFacilities() }} Critical
+        </span>
+      </div>
+      <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+        <span class="material-symbols-outlined text-[20px]">warning</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    @for (f of facilities(); track f.id) {
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 hover:border-blue-200 transition-all">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[20px]">domain</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold text-slate-900">{{ f.name }}</h3>
+                <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">{{ f.status }}</span>
+              </div>
+              <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                <span class="material-symbols-outlined text-[14px] text-slate-400">location_on</span>{{ f.location }} · ID: <span class="font-mono font-medium text-slate-700">{{ f.id }}</span>
+              </p>
+            </div>
+          </div>
+          <span
+            class="px-2 py-1 rounded text-xs font-semibold"
+            [class]="statsFor(f).activeAlertCount > 0 ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'"
+          >
+            {{ statsFor(f).activeAlertsLabel }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 py-3 px-3.5 bg-slate-50/70 rounded-lg border border-slate-100 text-center">
+          <div class="border-r border-slate-200/80">
+            <p class="text-[11px] text-slate-400 font-medium">Monitored Areas</p>
+            <p class="text-base font-bold text-slate-800">{{ f.areas }}</p>
+          </div>
+          <div class="border-r border-slate-200/80">
+            <p class="text-[11px] text-slate-400 font-medium">Cameras/Sensors</p>
+            <p class="text-base font-bold text-slate-800">{{ f.devices }}</p>
+          </div>
+          <div>
+            <p class="text-[11px] text-slate-400 font-medium">Criticality</p>
+            <p class="text-base font-bold" [class]="f.criticality === 'Tier 1' ? 'text-red-600' : f.criticality === 'Tier 2' ? 'text-amber-600' : 'text-slate-600'">
+              {{ f.criticality }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <div class="text-xs text-slate-500"><span class="font-medium text-slate-700">Primary Manager:</span> {{ f.manager }}</div>
+          <button
+            class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold text-slate-700 transition-colors flex items-center gap-1 cursor-pointer"
+            type="button"
+            (click)="openDetail(f)"
+          >
+            <span>View Facility Details</span>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+@if (selectedFacility(); as f) {
+  <app-facility-detail-modal
+    [facility]="f"
+    [stats]="selectedFacilityStats() ?? { activeAlertCount: 0, activeAlertsLabel: '0 Active Alerts' }"
+    (close)="closeDetail()"
+    (viewAlerts)="goToFacilityAlerts(f)"
+  />
+}

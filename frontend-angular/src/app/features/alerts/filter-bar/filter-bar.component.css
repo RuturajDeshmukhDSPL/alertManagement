@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  :host > div {
+    align-items: stretch;
+  }
+
+  :host > div > div:first-child,
+  :host > div > div:last-child {
+    width: 100%;
+  }
+
+  :host > div > div:first-child {
+    gap: 0.5rem;
+  }
+
+  :host > div > div:first-child button {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  :host > div > div:first-child > div {
+    display: none;
+  }
+
+  :host > div > div:last-child {
+    margin-left: 0;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  :host > div > div:last-child > div:nth-child(2),
+  :host > div > div:last-child > div:nth-child(4) {
+    flex: 1 1 8rem;
+  }
+
+  :host input[type='date'] {
+    width: 100%;
+    min-width: 0;
+  }
+}

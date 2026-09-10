@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+
+.fixed {
+  animation: overlay-fade-in 0.15s ease-out;
+}
+
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  :host > .fixed > div {
+    margin: 0.75rem;
+  }
+
+  :host > .fixed > div > div:last-child {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  :host > .fixed > div > div:last-child button {
+    width: 100%;
+  }
+}

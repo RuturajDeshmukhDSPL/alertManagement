@@ -1,0 +1,60 @@
+<aside class="sidebar-shell fixed left-0 top-header-height bottom-0 w-64 z-40 flex flex-col justify-between py-space-md">
+  <div class="px-space-sm">
+    <div class="px-space-md py-space-xs mb-space-xs font-label-sm text-[11px] text-slate-400 uppercase tracking-wider">
+      Operations Core
+    </div>
+    <nav class="sidebar-nav space-y-space-xxs" aria-label="Operations navigation">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="is-active"
+        #dashboardLink="routerLinkActive"
+        class="sidebar-link flex items-center gap-space-md px-space-md py-space-sm transition-colors rounded-xl cursor-pointer"
+        [class.text-slate-700]="!dashboardLink.isActive"
+        [class.hover:bg-slate-100]="!dashboardLink.isActive"
+        [class.font-medium]="!dashboardLink.isActive"
+      >
+        <span class="sidebar-link-icon material-symbols-outlined text-[20px]">dashboard</span>
+        <span class="text-sm">Dashboard</span>
+      </a>
+
+      <a
+        routerLink="/facilities"
+        routerLinkActive="is-active"
+        #facilitiesLink="routerLinkActive"
+        class="sidebar-link flex items-center gap-space-md px-space-md py-space-sm transition-colors rounded-xl cursor-pointer"
+        [class.text-slate-700]="!facilitiesLink.isActive"
+        [class.hover:bg-slate-100]="!facilitiesLink.isActive"
+        [class.font-medium]="!facilitiesLink.isActive"
+      >
+        <span class="sidebar-link-icon material-symbols-outlined text-[20px]">domain</span>
+        <span class="text-sm">Facility Management</span>
+        <span class="sidebar-count sidebar-count-facility ml-auto text-[11px] font-mono font-semibold px-space-xs py-space-xxs rounded">{{ totalFacilities() }} Sites</span>
+      </a>
+
+      <a
+        routerLink="/alerts"
+        routerLinkActive="is-active"
+        #alertsLink="routerLinkActive"
+        class="sidebar-link flex items-center gap-space-md px-space-md py-space-sm transition-colors rounded-xl cursor-pointer"
+        [class.text-slate-700]="!alertsLink.isActive"
+        [class.hover:bg-slate-100]="!alertsLink.isActive"
+        [class.font-medium]="!alertsLink.isActive"
+      >
+        <span class="sidebar-link-icon material-symbols-outlined text-[20px]">notifications_active</span>
+        <span class="text-sm">Alerts</span>
+        <span class="sidebar-count sidebar-count-alert ml-auto text-[11px] font-mono font-semibold px-space-xs py-space-xxs rounded">{{ totalAlerts() }}</span>
+      </a>
+
+      <div class="sidebar-action-wrap pt-2">
+        <button
+          class="sidebar-action w-full flex items-center justify-center gap-2 px-space-md py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white font-medium text-sm transition-all shadow-sm"
+          type="button"
+          (click)="openRaiseAlert()"
+        >
+          <span class="material-symbols-outlined text-[18px]">add_alert</span>
+          <span>Raise Alert</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</aside>

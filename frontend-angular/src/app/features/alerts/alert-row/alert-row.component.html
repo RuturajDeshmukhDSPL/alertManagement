@@ -1,0 +1,32 @@
+  <td class="px-4 py-3 whitespace-nowrap">
+    <div class="flex items-center gap-1.5">
+      <span class="material-symbols-outlined text-[18px]" [class]="severityStyles[alert().severity].iconColor">
+        {{ severityStyles[alert().severity].icon }}
+      </span>
+      <span class="font-mono font-semibold text-slate-900">{{ alert().code }}</span>
+    </div>
+    <div class="mt-0.5">
+      <app-severity-badge [severity]="alert().severity" />
+    </div>
+  </td>
+  <td class="px-4 py-3">
+    <div class="font-semibold text-slate-900 group-hover:text-blue-600 line-clamp-1">{{ alert().title }}</div>
+    <div class="text-slate-500 text-[11px] truncate max-w-xs">{{ alert().description }}</div>
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap text-slate-600">
+    <div class="font-medium">{{ alert().source }}</div>
+    <div class="text-[11px] text-slate-400 font-mono">{{ alert().host }}</div>
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap">
+    <app-status-badge [status]="alert().status" />
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap text-slate-500">{{ alert().reported }}</td>
+  <td class="px-4 py-3 text-right whitespace-nowrap">
+    <button
+      class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer"
+      type="button"
+      (click)="onInspectClick($event)"
+    >
+      Inspect
+    </button>
+  </td>

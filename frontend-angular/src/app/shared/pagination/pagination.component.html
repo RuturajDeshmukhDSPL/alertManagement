@@ -1,0 +1,59 @@
+<div class="px-5 py-3 border-t border-slate-100 bg-slate-50/70 shrink-0 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+  <div class="flex items-center gap-2">
+    <span class="text-slate-500 font-medium">Rows per page:</span>
+    <select
+      class="px-2 py-1 rounded-lg border border-slate-200 bg-white text-slate-700 font-medium text-xs focus:outline-none focus:border-blue-500 cursor-pointer"
+      [value]="pageSize()"
+      (change)="onPageSizeChange($any($event.target).value)"
+    >
+      @for (size of pageSizeOptions(); track size) {
+        <option [value]="size">{{ size }}</option>
+      }
+    </select>
+    <span class="text-slate-400 ml-1">|</span>
+    <span class="font-medium text-slate-600">
+      @if (totalItems() === 0) {
+        0-0 of 0 alerts
+      } @else {
+        Showing {{ rangeStart() }}-{{ rangeEnd() }} of {{ totalItems() }} alerts
+      }
+    </span>
+  </div>
+
+  <div class="flex items-center gap-1.5">
+    <button
+      class="inline-flex items-center justify-center px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-xs font-medium gap-1 cursor-pointer"
+      type="button"
+      [disabled]="currentPage() <= 1"
+      (click)="goTo(currentPage() - 1)"
+    >
+      <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+      <span>Previous</span>
+    </button>
+
+    <div class="flex items-center gap-1">
+      @for (p of pages(); track p) {
+        <button
+          type="button"
+          class="min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg font-semibold text-xs transition-colors cursor-pointer"
+          [class]="p === currentPage()
+            ? 'bg-blue-600 text-white shadow-sm'
+            : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 font-medium'"
+          (click)="goTo(p)"
+        >
+          {{ p }}
+        </button>
+      }
+    </div>
+
+    <button
+      class="inline-flex items-center justify-center px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-xs font-medium gap-1 cursor-pointer"
+      type="button"
+      [disabled]="currentPage() >= totalPages()"
+      (click)="goTo(currentPage() + 1)"
+    >
+      <span>Next</span>
+      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    </button>
+  </div>
+</div>

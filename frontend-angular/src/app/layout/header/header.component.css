@@ -1,0 +1,60 @@
+:host {
+  display: contents;
+}
+
+.material-symbols-outlined {
+  user-select: none;
+}
+
+@media (max-width: 767px) {
+  .app-header {
+    position: sticky;
+    height: auto;
+  }
+
+  .header-inner {
+    min-height: 3.25rem;
+    padding: 0.5rem 0.75rem;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .header-inner > :first-child {
+    min-width: 0;
+  }
+
+  .header-inner > :nth-child(2) {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .header-actions > button:first-child {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .header-actions > button:first-child span:last-child,
+  .header-actions > div > button > div:last-of-type,
+  .header-actions > div > button > span:last-child {
+    display: none;
+  }
+
+  .header-inner > :first-child > div:first-of-type {
+    display: none;
+  }
+
+  .header-inner > :first-child > div:last-child {
+    min-width: 0;
+    max-width: 9rem;
+  }
+
+  .header-inner select {
+    max-width: 7.5rem;
+  }
+}

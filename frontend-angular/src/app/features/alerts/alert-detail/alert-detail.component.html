@@ -1,0 +1,94 @@
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
+  @if (alert(); as a) {
+    <div class="space-y-3">
+      <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+        <span class="material-symbols-outlined text-[18px]" [class]="severityStyles[a.severity].iconColor">
+          {{ severityStyles[a.severity].icon }}
+        </span>
+        <span>{{ a.code }}</span>
+      </div>
+      <h2 class="text-lg font-bold text-slate-900 leading-snug">{{ a.title }}</h2>
+      <div class="flex items-center gap-2 pt-0.5">
+        <app-severity-badge [severity]="a.severity" />
+        <app-status-badge [status]="a.status" />
+      </div>
+    </div>
+
+    <p class="text-sm text-slate-600 leading-relaxed">{{ a.description }}</p>
+
+    <div class="space-y-4 pt-2 border-t border-slate-100">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">dns</span>
+        <div class="text-xs space-y-0.5">
+          <div class="text-slate-400 font-medium">Host</div>
+          <div class="text-slate-800 font-medium text-sm font-mono">{{ a.host }}</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">domain</span>
+        <div class="text-xs space-y-0.5">
+          <div class="text-slate-400 font-medium">Facility</div>
+          <div class="text-slate-800 font-medium text-sm">{{ facilityName() }}</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">label</span>
+        <div class="text-xs space-y-0.5">
+          <div class="text-slate-400 font-medium">Source</div>
+          <div class="text-slate-800 font-medium text-sm">{{ a.source }}</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">person</span>
+        <div class="text-xs space-y-0.5">
+          <div class="text-slate-400 font-medium">Owner</div>
+          <div class="text-slate-800 font-medium text-sm">{{ a.owner }}</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-[18px] text-slate-400 shrink-0 mt-0.5">schedule</span>
+        <div class="text-xs space-y-0.5">
+          <div class="text-slate-400 font-medium">Reported</div>
+          <div class="text-slate-800 font-medium text-sm">{{ a.reported }}</div>
+        </div>
+      </div>
+    </div>
+
+    @if (a.status !== 'Closed') {
+      <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
+        <button
+          class="flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-colors text-center cursor-pointer"
+          [class]="a.status === 'Addressed'
+            ? 'border border-blue-300 bg-blue-50 hover:bg-blue-100 text-blue-700'
+            : 'border border-slate-200 bg-white hover:bg-slate-50 text-slate-700'"
+          type="button"
+          (click)="toggleAddressed.emit(a)"
+        >
+          {{ a.status === 'Addressed' ? 'Unmark as addressed' : 'Mark as addressed' }}
+        </button>
+        <button
+          class="flex-1 py-2.5 px-4 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium transition-colors text-center shadow-sm cursor-pointer"
+          type="button"
+          (click)="requestClose.emit(a)"
+        >
+          Close alert
+        </button>
+      </div>
+    } @else {
+      <div class="flex items-center justify-between p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800">
+        <div class="flex items-center gap-2 font-medium">
+          <span class="material-symbols-outlined text-[18px] text-emerald-600">check_circle</span>
+          <span>This alert is closed and resolved</span>
+        </div>
+        <button class="text-emerald-700 hover:text-emerald-900 font-semibold underline cursor-pointer" type="button" (click)="reopen.emit(a)">
+          Reopen
+        </button>
+      </div>
+    }
+  } @else {
+    <div class="flex flex-col items-center justify-center py-16 text-center text-slate-400">
+      <span class="material-symbols-outlined text-[40px] mb-2">notifications_paused</span>
+      <p class="text-sm">Select an alert to view details</p>
+    </div>
+  }
+</div>
