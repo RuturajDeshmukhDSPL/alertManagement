@@ -16,16 +16,14 @@ PulseAlert is an alert and facility management application for monitoring operat
 
 - Angular
 - TypeScript
-- RxJS
 - Angular Signals
-- SCSS
+- CSS
 - REST API
 - Node.js
 - Express
 - Sequelize
 - MySQL
-- Python
-- Selenium
+
 
 ## Prerequisites
 
@@ -34,18 +32,17 @@ Make sure you have installed:
 - Node.js
 - npm
 - Angular CLI
-- MySQL or MariaDB
-- Python 3.10 or newer
-- Google Chrome
-- ChromeDriver approved by your Windows security policy
+- MySQL 
+- Any browser
+
 
 ## Installation
 
 Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd <project-folder>
+git clone https://github.com/RuturajDeshmukhDSPL/alertManagement
+cd alertManagement
 ```
 
 ### Install backend dependencies
@@ -58,19 +55,19 @@ npm install
 Configure the backend environment:
 
 ```powershell
-Copy-Item .env.example .env
+Copy-Item  .env
 ```
 
 Update `.env` with your MySQL credentials. The frontend is configured to call the backend on port `3000`, so use:
 
 ```env
-PORT=3000
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_NAME=alertManagement
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-CORS_ORIGIN=http://localhost:4200
+PORT=
+DB_HOST=
+DB_PORT=
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+CORS_ORIGIN=
 ```
 
 Create the `alertManagement` database and required tables before seeding the application data.
@@ -86,7 +83,7 @@ npm run seed
 Open a second terminal from the project root:
 
 ```powershell
-cd pulsealert-angular
+cd frontend-angular
 npm install
 ```
 
@@ -95,7 +92,7 @@ npm install
 Build the Angular application for production:
 
 ```powershell
-cd pulsealert-angular
+cd frontend-angular
 npm run build
 ```
 
@@ -126,11 +123,9 @@ Backend API:
 http://localhost:3000
 ```
 
-Health check:
 
-```text
-http://localhost:3000/health
-```
+
+
 
 ## Start Frontend
 
