@@ -35,6 +35,18 @@ Make sure you have installed:
 - MySQL 
 - Any browser
 
+## Limitations and Assumptions
+
+- MySQL must be configured and the database tables created before seeding.
+- The frontend assumes the backend is available at http://localhost:3000.
+- CORS and environment variables must be configured correctly.
+- Authentication and authorization details are not covered in this documentation.
+- The application is intended for local or development use unless additional    deployment configuration is added.
+- Selenium tests require a compatible ChromeDriver installation.
+
+## A short architecture diagram showing Angular → Node.js → MySQL. 
+
+![Architecture](frontend-angular/images/Archi.jpg)
 
 ## Installation
 
