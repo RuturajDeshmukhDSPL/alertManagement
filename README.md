@@ -196,7 +196,11 @@ To run without displaying the browser:
 $env:PULSEALERT_HEADLESS="1"
 python testing/test_pulsealert.py
 ```
+### Dashboard view
 ![Dashboard](frontend-angular/images/Dashboard.png)
+### Facility view
 ![Facility](frontend-angular/images/Facility.png)
+### Alerts view
 ![Alerts](frontend-angular/images/Alerts.png)
+### Raise Alert view
 ![Raise Alert](frontend-angular/images/RaiseAlert.png)
