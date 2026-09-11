@@ -160,7 +160,6 @@ Start the backend before using the frontend so alerts and facilities can load fr
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/health` | Check API availability |
 | GET | `/api/alerts` | List and filter alerts |
 | GET | `/api/alerts/:id` | Get one alert |
 | POST | `/api/alerts` | Create an alert |
